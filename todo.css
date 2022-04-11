@@ -1,0 +1,22 @@
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.projects {
+    grid-column: 1
+}
+
+.projectDescription { 
+    grid-column:2;
+}
+
+.tasks {
+    grid-column: 3
+}
+
+.description {
+    grid-column: 4
+}
