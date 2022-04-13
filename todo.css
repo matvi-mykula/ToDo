@@ -1,22 +1,41 @@
+.body {
+  padding-left: 5px;
+}
 
 .content {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
 
 .projects {
-    grid-column: 1
+  grid-column: 1;
 }
 
-.projectDescription { 
-    grid-column:2;
+.projectDescription {
+  grid-column: 2;
 }
 
 .tasks {
-    grid-column: 3
+  grid-column: 3;
 }
 
 .description {
-    grid-column: 4
+  grid-column: 4;
+}
+
+.fa-check {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  color: #fff;
+  font-weight: normal;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
 }

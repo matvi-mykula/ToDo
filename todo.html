@@ -1,196 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
-<title>Mat's wonderful page</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="todo.css">
+  <meta charset="UTF-8" />
+  <title>Mat's wonderful page</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="todo.css" />
 
+  <body class="body">
+    <div class="header font-monospace">
+      <h1>Project Manager</h1>
+      <br />
 
-<body>
+      <div id="projectForm">
+        ::New Project::
+        <br /><input type="text" id="pname" placeholder="New Project Title" />
+        <br /><input
+          type="text"
+          id="description"
+          placeholder="Description"
+        /><br />
 
-
-<div class="header">
- <h1>Project Manager</h1>
-    <div id='projectForm'>
-            ::New Project:: 
-            <br><input type="text" id='pname' placeholder='New Project Title'/>
-            <br><input type="text" id='description' placeholder='Description' /><br />
-
-            <input type="button" name="btnSubmit" value="Submit" onclick="call_createProject()" />
+        <button
+          name="btnSubmit"
+          value="Submit"
+          onclick="createProject(document.getElementById('pname').value, document.getElementById('description').value, [])"
+        >
+          Submit
+        </button>
+        <br /><br />
+      </div>
+      <p>::: Project list :::</p>
     </div>
- <p>::: Project list :::</p>
-</div>
 
+    <div class="content input-group mb-3 font-monospace" id="content">
+      <div class="projects" id="projectContainer"></div>
+      <div id="projectDescription" class="projectDescription"></div>
+      <div
+        class="tasks"
+        id="taskContainer"
+        class="btn btn-secondary btn-lg btn-block"
+      ></div>
+      <div class="description" id="descriptionHolder"></div>
+    </div>
 
-<div class='content' id='content'>
-<div class='projects' id='projectContainer'></div>
-<div id='projectDescription' class='projectDescription'></div>
-<div class='tasks' id='taskContainer'></div>
-<div class='description' id='descriptionHolder'></div>
-</div>
-
-<script>
-    // todo/project management with factory functions and local storage
-    // still need to make the projects and tasks editable and finishable and deletable
-
-
-const projectFactory = (title, description, todoList) => {
-    return {
-        title: title,
-        description: description,
-        todoList: todoList,
-         }
-}
-
-// upon submission of inputs
-function createProject(title, description, todoList) {
-    newProject = projectFactory(title, description, todoList)
-    
-    //get json project data
-    if (localStorage.getItem("projectJSON") === null){
-        projectList = []
-    }  else {projectList = JSON.parse(localStorage.getItem('projectJSON'))
-            }
-            // console.log('test' + projectList)
-    projectList.push(newProject)
-    localStorage.setItem('projectJSON', JSON.stringify(projectList))
-    remove_elements(document.getElementById('projectContainer'))
-    createProjectbtns()
-}
-
-const taskFactory = (title, description, doneStatus) => {
-    return {
-        title: title,
-        description: description,
-        doneStatus: doneStatus,
-       
-    }
-}
-
-
-//function that adds all the elements for project (edit, todoList)
-function createProjectbtns() {
-    projectContainer = document.getElementById('projectContainer')
-    projectList = JSON.parse(localStorage.getItem('projectJSON'))
-    
-    if (projectList){
-    for (let i = 0; i < projectList.length; i++) {
-        var tempElement = document.createElement('div')
-        var tempBtn = document.createElement('button')
-        tempBtn.textContent = projectList[i].title
-        tempBtn.setAttribute('id', i)
-
-        tempBtn.onclick = function () {
-            remove_elements(taskContainer)
-            openProject(i) ,
-            showProjectDescription(projectList[i].description)
-        }
-
-        projectContainer.appendChild(tempElement)
-        tempElement.appendChild(tempBtn)
-    }}
-    return
-}
-
-function showProjectDescription(proDes) {
-    projectDescription = document.getElementById('projectDescription')
-    projectDescription.textContent = proDes
-}
-
-//when you click project button this function creates elements showing description
-//also creates buttons for each task in project and allows fro adding tasks to project
-function openProject(index){
-    projectList = JSON.parse(localStorage.getItem('projectJSON'))
-    project = projectList[index]
-    taskContainer = document.getElementById('taskContainer')
-    descriptionHolder = document.getElementById('descriptionHolder')
-
-    if (project.todoList.length >0){
-    for (let i = 0; i < project.todoList.length; i++) {
-        var tempElement = document.createElement('div')
-        var tempBtn = document.createElement('button')
-        tempBtn.textContent = project.todoList[i].title
-        tempBtn.setAttribute('id', project.todoList[i].title)
-
-        tempBtn.onclick = function () {
-            remove_elements(descriptionHolder)
-            showDescription(project.todoList[i])
-        }
-        taskContainer.appendChild(tempElement)
-        tempElement.appendChild(tempBtn)
-    }}
-
-    var addTasker = document.createElement('div')
-    var taskTitle = document.createElement('input')
-        taskTitle.type = 'text'
-        taskTitle.placeholder = 'Task Title'
-    var taskDescription = document.createElement('input')
-        taskDescription.type = 'text'
-        taskDescription.placeholder = 'Task Description'
-    var taskDoneStatus = document.createElement('input')
-        taskDoneStatus.type = 'checkbox'
-        taskDoneStatus.id = 'doneStatusCheckbox'
-    var newlabel = document.createElement("Label");
-        newlabel.setAttribute("for", 'doneStatusCheckbox');
-        newlabel.innerHTML = "Finished Status";
-
-    var newTaskSubmit = document.createElement('button')
-        newTaskSubmit.textContent = 'Submit'
-        newTaskSubmit.onclick = function () {
-            newTask = taskFactory(taskTitle.value, taskDescription.value, taskDoneStatus.checked)
-            project.todoList.push(newTask)
-            projectList[index] = project
-            localStorage.setItem('projectJSON', JSON.stringify(projectList))
-            remove_elements(taskContainer)
-            openProject(index)
-        }
-
-    addTasker.appendChild(taskTitle)
-    addTasker.appendChild(taskDescription)
-    addTasker.appendChild(taskDoneStatus)
-    addTasker.appendChild(newlabel)
-    addTasker.appendChild(newTaskSubmit)
-    taskContainer.appendChild(addTasker)
-    
-    return
-}
-
-//opens task description and other attributes in new element
-//needs to be able to edit stuff and check done status => change color of button
-function showDescription(object) {
-    descriptionHolder = document.getElementById('descriptionHolder')
-    ///var descriptionElement = document.createElement('div')
-    var objectTitle = document.createElement('p')
-    objectTitle.textContent = 'Task Title ::: ' + object.title
-    var objectDescription = document.createElement('p')
-    objectDescription.textContent = 'Description::: ' + object.description
-    var objectDoneStatus = document.createElement('p')
-    objectDoneStatus.textContent = 'Done Status::: ' + object.doneStatus
-
-    descriptionHolder.appendChild(objectTitle)
-    descriptionHolder.appendChild(objectDescription)
-    descriptionHolder.appendChild(objectDoneStatus)
-}
-
-function remove_elements(element) {
-    while (element.firstChild) {
-        element.removeChild(element.firstChild);
-    }
-}
-
-
-
-//run this to initialize the page.. should this be HTML instead?
-function todoListStart() {
-
-    createProjectbtns()
-
-}
-
-todoListStart()
-
-</script>
-
-
-</body>
+    <script src="todo.js"></script>
+  </body>
 </html>
