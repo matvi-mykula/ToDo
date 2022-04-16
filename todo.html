@@ -12,29 +12,36 @@
   <link rel="stylesheet" href="todo.css" />
 
   <body class="body">
-    <div class="header font-monospace">
-      <h1>Project Manager</h1>
-      <br />
+    <div class="top font-monospace">
+      <div class="header">
+        <h1>Project Manager</h1>
+        <br />
 
-      <div id="projectForm">
-        ::New Project::
-        <br /><input type="text" id="pname" placeholder="New Project Title" />
-        <br /><input
-          type="text"
-          id="description"
-          placeholder="Description"
-        /><br />
+        <div id="projectForm">
+          ::New Project::
+          <br /><input type="text" id="pname" placeholder="New Project Title" />
+          <br /><input type="text" id="description" placeholder="Description" />
+          <br /><input
+            type="date"
+            id="dueDate"
+            placeholder="yyyy-mm-dd"
+            min="getTodaysDate()"
+            max="2030-01-01"
+          />
+          <br />
 
-        <button
-          name="btnSubmit"
-          value="Submit"
-          onclick="createProject(document.getElementById('pname').value, document.getElementById('description').value, [])"
-        >
-          Submit
-        </button>
-        <br /><br />
+          <button name="btnSubmit" id="projectSubmit" value="Submit">
+            Submit
+          </button>
+          <br /><br />
+        </div>
+
+        <p>::: Project list :::</p>
       </div>
-      <p>::: Project list :::</p>
+      <div class="cal">
+        <div class="title" id="header"></div>
+        <div id="calBody"></div>
+      </div>
     </div>
 
     <div class="content input-group mb-3 font-monospace" id="content">
@@ -49,5 +56,6 @@
     </div>
 
     <script src="todo.js"></script>
+    <!-- <script src="calendar.js"></script> -->
   </body>
 </html>
